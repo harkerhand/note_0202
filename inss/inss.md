@@ -28,8 +28,7 @@ Intelligent Scheduling orchestrator for multi-GPU inference servers with spatio-
 
 # 简介
 
-Temporal sharing [45] and spatial sharing [63] are the two most common ways of sharing resources.
-时间共享[45]和空间共享[63]是两种最常见的资源共享方式。
+本文提出并实现了 InSS，这是一种在多 GPU 推理服务器上的智能调度编排器，用于通过时空共享实现高吞吐量。我们首先提出一个**分析性能模型，该模型根据干扰和排队延迟来预测任务延迟**。 InSS建立在干扰感知分析模型的基础上，可以**智能地决定模型放置、GPU资源分配和调整批量大小，以最大化系统吞吐量**。大量的原型实验验证了 InSS 的效率。 InSS 可以在满足 SLO 的同时将吞吐量提高高达 86%。
 
 ## 挑战
 
