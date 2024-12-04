@@ -1,6 +1,5 @@
 #include <bits/stdc++.h>
 using namespace std;
-#define int long long
 
 template <class T>
 /// @brief 插入元素
@@ -164,26 +163,25 @@ private:
 public:
 	/// @brief 基数排序
 	/// @param a 数组
-	/// @param link 链表
 	/// @param d 位数
 	/// @param r 进制
 	/// @param n 数组长度
 	void static radixSort(T *a, const int d, const int r, const int n)
 	{
-		int *link = new int[n + 1];
+		int link[n];
 		int f[r], e[r]; // f[i]指向第i个桶的第一个元素，e[i]指向第i个桶的最后一个元素
-		for (int i = 1; i < n; i++)
+		for (int i = 0; i < n; i++)
 			link[i] = i + 1;
-		link[n] = 0;
-		int first = 1;
+		link[n - 1] = -1;
+		int first = 0;
 		for (int i = 0; i < d; i++)
 		{
-			fill(f, f + r, 0);
+			fill(f, f + r, -1);
 			// 按第i位数字分配到桶中
-			for (int current = first; current; current = link[current])
+			for (int current = first; current != -1; current = link[current])
 			{
 				int k = digit(a[current], i, r);
-				if (!f[k])
+				if (f[k] == -1)
 					f[k] = current;
 				else
 					link[e[k]] = current;
@@ -191,37 +189,55 @@ public:
 			}
 			// 找到第一个非空桶的首尾元素
 			int j = 0;
-			while (!f[j])
+			while (f[j] == -1)
 				j++;
 			first = f[j];
 			int last = e[j];
 			// 将各个桶中的元素串联起来
 			for (int k = j + 1; k < r; k++)
 			{
-				if (f[k])
+				if (f[k] != -1)
 				{
 					link[last] = f[k];
 					last = e[k];
 				}
 			}
 			// 串联最后一个桶
-			link[last] = 0;
+			link[last] = -1;
 		}
-		T *temp = new T[n + 1];
-		temp[0] = 0;
-		int cnt = 1;
-		for (int i = first; i; i = link[i])
+		T temp[n];
+		int cnt = 0;
+		for (int i = first; i != -1; i = link[i])
 			temp[cnt++] = a[i];
-		copy(temp, temp + n + 1, a);
-		delete[] link;
+		copy(temp, temp + n, a);
+	}
+	/// @brief 更短的基数排序
+	/// @param a 数组
+	/// @param d 位数
+	/// @param r 进制
+	/// @param n 数组长度
+	void static shortRadixSort(T *a, int d, int r, int n)
+	{
+		for (int i = 0; i < d; i++)
+		{
+			int cnt[r] = {0};
+			for (int j = 0; j < n; j++)
+				cnt[digit(a[j], i, r)]++;
+			for (int j = 1; j < r; j++)
+				cnt[j] += cnt[j - 1];
+			T b[n] = {0};
+			for (int j = n - 1; j >= 0; j--)
+				b[--cnt[digit(a[j], i, r)]] = a[j];
+			copy(b, b + n, a);
+		}
 	}
 };
 
 signed main()
 {
-	// 				1   2   3   4   5   6   7   8   9
-	int a[10] = {0, 49, 38, 65, 97, 76, 13, 27, 49, 55};
+	int a[9] = {49, 38, 65, 97, 76, 13, 27, 49, 55};
+	// RadixSort<int>::test_sort(a, 2, 10, 9);
 	RadixSort<int>::radixSort(a, 2, 10, 9);
-	for (int i = 1; i < 10; i++)
+	for (int i = 0; i < 9; i++)
 		cout << a[i] << " ";
 }
