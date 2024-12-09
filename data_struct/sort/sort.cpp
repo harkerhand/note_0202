@@ -235,9 +235,8 @@ public:
 
 signed main()
 {
-	int a[9] = {49, 38, 65, 97, 76, 13, 27, 49, 55};
-	// RadixSort<int>::test_sort(a, 2, 10, 9);
-	RadixSort<int>::radixSort(a, 2, 10, 9);
+	int a[10] = {0, 49, 38, 65, 97, 76, 13, 27, 49, 55};
+	HeapSort<int>::heapSort(a, 9);
 	for (int i = 0; i < 9; i++)
-		cout << a[i] << " ";
+		cout << a[i + 1] << " ";
 }
